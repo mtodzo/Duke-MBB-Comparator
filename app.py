@@ -13,7 +13,7 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='dropdown',
         options=[{'label': i, 'value': i} for i in ['Justin Wei', 'Jonathan Michala', 'Miles Todzo']],
-        value='Miles Todzo'
+        value='Justin Wei'
     ),
     html.Div(id='display-value')
 ])
@@ -22,11 +22,11 @@ app.layout = html.Div([
               [dash.dependencies.Input('dropdown', 'value')])
 def display_value(value):
     if value == 'Justin Wei':
-        return 'Justin Wei is dope!"
+        return 'Justin Wei is dope!'
     elif value == 'Jonathan Michala':
-        return 'Hi, Jonathan!'
+        return 'Hello, Jonathan! Welcome :-)'
     else:
-        return 'Error: you requested an invalid team member'
+        return 'Error: Who is Miles Todzo? Serra sucks at basketball'
 
 if __name__ == '__main__':
     app.run_server(debug=True)
