@@ -13,7 +13,7 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='dropdown',
         options=[{'label': i, 'value': i} for i in ['Justin Wei', 'Jonathan Michala', 'Miles Todzo']],
-        value='LA'
+        value='Miles Todzo'
     ),
     html.Div(id='display-value')
 ])
