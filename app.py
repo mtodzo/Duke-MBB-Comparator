@@ -52,20 +52,26 @@ app.layout = html.Div([
     generatePlayerDropdown('player1-selector'),
 
     html.Div(id='display-value'),
-    dcc.Graph(id='player-graph'),
+    dcc.Graph(
+        id='player-graph'
+    ),
 ])
 
 @app.callback(dash.dependencies.Output('player-graph', 'figure'),
               [dash.dependencies.Input('player1-selector', 'value')])
 
 def player_1_selector_callback(playerNames):
+
     playersToGraph = []
-    for pn in playerNames:
-        playersToGraph.append(playerGraphs[pn])
+    if playerNames:
+        for pn in playerNames:
+            playersToGraph.append(playerGraphs[pn])
     return {
         'data': playersToGraph,
         'layout': go.Layout(
             title='Average Player Efficiency Over Season',
+            xaxis={'title': 'Games Into Season', 'range': [0, 40]},
+            yaxis={'title': 'Player Efficiency', 'range': [0, 40]},
             showlegend=True,
             margin=go.Margin(l=40, r=0, t=40, b=30)
         ),
