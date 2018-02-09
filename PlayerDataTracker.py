@@ -36,7 +36,7 @@ class PlayerDataTracker:
         self.readFile()
 
     def readFile(self):
-        with open('./mbb_player_data.csv', newline='', errors='ignore') as playerFile:
+        with open('./data/mbb_player_data.csv', newline='', errors='ignore') as playerFile:
             reader = csv.DictReader(playerFile, delimiter=',')
             # read through entries, adding to neighbourhood list and price per neighbourhood dictionary
             for row in reader:

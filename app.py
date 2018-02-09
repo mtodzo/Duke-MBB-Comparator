@@ -12,13 +12,12 @@ server = Flask(__name__, static_folder='static')
 app = dash.Dash(server=server)
 app.title = 'DMBB Compare'
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-app.config['suppress_callback_exceptions']=True
 
 
 @server.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(server.root_path, 'static'),
-                               'favicon.ico', mimetype='image/dmbb-logo.ico')
+                               'favicon.ico', mimetype='image/favicon.ico')
 @server.route('/dmbb-logo.jpg')
 def dmbb_logo():
     return send_from_directory(os.path.join(server.root_path, 'static'),

@@ -36,7 +36,7 @@ class TeamDataTracker:
         self.readFile()
 
     def readFile(self):
-        with open('./TeamComparisonData.csv', newline='', errors='ignore') as teamFile:
+        with open('./data/TeamComparisonData.csv', newline='', errors='ignore') as teamFile:
             reader = csv.DictReader(teamFile, delimiter=',')
             # read through entries, adding to neighbourhood list and price per neighbourhood dictionary
             for row in reader:
