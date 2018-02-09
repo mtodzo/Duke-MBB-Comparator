@@ -14,53 +14,63 @@ app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"
 pdt = PlayerDataTracker()
 playerList = pdt.getPlayers()
 
-playerGraphs = []
-for player in playerList:
-    p = go.Scatter(
-        x = player.getGameNos(),
-        y = player.getAverageEffs(),
-        mode = 'lines',
-        name = player.getName()
-    )
-    playerGraphs.append(p)
+playerGraphs = {}
+
+def createPlayerGraphs():
+    for player in playerList:
+        p = go.Scatter(
+            x = player.getGameNos(),
+            y = player.getAverageEffs(),
+            mode = 'lines',
+            name = player.getName()
+        )
+        playerGraphs[player.getName()] = p
+
+createPlayerGraphs()
+
+# generates player dropdown
+def generatePlayerDropdown(selectorID):
+    complete_data = []
+    values = []
+    for player in playerList:
+        data = {}
+        data['label'] = player.name
+        data['value'] = player.name
+        values.append(player)
+        complete_data.append(data)
+    return dcc.Dropdown(
+        id=selectorID,
+        options= complete_data,
+        multi=True,
+        )
 
 app.layout = html.Div([
-    html.H2('Hello, Team!'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['Justin Wei', 'Jonathan Michala', 'Miles Todzo']],
-        value='Justin Wei'
-    ),
+    html.H2('Compare Dukie Ballers!'),
+
+    # PLAYER SELECTION
+    html.H3('Pick Players to Compare:'),
+    generatePlayerDropdown('player1-selector'),
+
     html.Div(id='display-value'),
-    dcc.Graph(
-        figure=go.Figure(
-            data= playerGraphs,
-            layout=go.Layout(
-                title='Player Efficacies per Game',
-                showlegend=True,
-                legend=go.Legend(
-                    x=0,
-                    y=1.0
-                ),
-                margin=go.Margin(l=40, r=0, t=40, b=30)
-            )
-        ),
-        style={'height': 300},
-        id='my-graph'
-    )
+    dcc.Graph(id='player-graph'),
 ])
 
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
+@app.callback(dash.dependencies.Output('player-graph', 'figure'),
+              [dash.dependencies.Input('player1-selector', 'value')])
 
-def display_value(value):
-    if value == 'Justin Wei':
-        return 'Justin Wei is dope!'
-    elif value == 'Jonathan Michala':
-        return 'Hello, Jonathan! Welcome :-)'
-    else:
-        return 'Error: Who is Miles Todzo? Serra sucks at basketball'
-
+def player_1_selector_callback(playerNames):
+    playersToGraph = []
+    for pn in playerNames:
+        playersToGraph.append(playerGraphs[pn])
+    return {
+        'data': playersToGraph,
+        'layout': go.Layout(
+            title='Average Player Efficiency Over Season',
+            showlegend=True,
+            margin=go.Margin(l=40, r=0, t=40, b=30)
+        ),
+        'style': {'height': 300},
+    }
 
 
 if __name__ == '__main__':
