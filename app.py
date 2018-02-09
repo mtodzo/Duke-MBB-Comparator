@@ -5,12 +5,24 @@ import plotly.graph_objs as go
 import os
 from PlayerDataTracker import PlayerDataTracker
 from TeamDataTracker import TeamDataTracker
+from flask import Flask, send_from_directory
 
-app = dash.Dash(__name__)
-server = app.server
 
+server = Flask(__name__, static_folder='static')
+app = dash.Dash(server=server)
+app.title = 'DMBB Compare'
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-dcc._css_dist[0]['relative_package_path'].append('styles.css')
+app.config['suppress_callback_exceptions']=True
+
+
+@server.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(server.root_path, 'static'),
+                               'favicon.ico', mimetype='image/dmbb-logo.ico')
+@server.route('/dmbb-logo.jpg')
+def dmbb_logo():
+    return send_from_directory(os.path.join(server.root_path, 'static'),
+                               'dmbb-logo.jpg', mimetype='image/dmbb-logo.jpg')
 
 pdt = PlayerDataTracker()
 tdt = TeamDataTracker()
@@ -71,24 +83,47 @@ def generatePlayerDropdown(selectorID):
         )
 
 app.layout = html.Div(children = [
-    html.H2(style={'text-align':'center'}, children=['Compare Dukie Ballers!']),
+    html.Div(
+        id='header',
+        style={
+            'display': 'inline-block',
+            'width': '100%',
+
+        },
+        children = [
+            html.Img(id='image', src='./dmbb-logo.jpg', style={'width':'150px', 'float': 'left'}),
+            html.Div(
+                style={'float': 'left', 'padding-top': '30px'},
+                children = [
+                    html.H2(children=['Compare Duke Ballers!']),
+                    html.P(style={'padding-left': '5px'}, children=["By Jonathan Michala, Miles Todzo, and Justin Wei"])
+                ]
+
+            )
+
+        ]
+
+    ),
+
+
+    html.Hr(),
+
     html.Div(
         className='graph-container',
         style={
     		'width':'100%',
         	'margin':'auto',
         	'overflow':'hidden',
-            'display': 'inline-block'
+            'display': 'inline-block',
         },
 
         children = [
-
             # PLAYER GRAPH
             html.Div(
                 id='players-div',
                 children = [
                     # PLAYER SELECTION
-                    html.H3('Pick Players to Compare:'),
+                    html.H4('Pick Players to Compare:'),
                     generatePlayerDropdown('player-selector'),
                     dcc.Graph(
                         id='player-graph'
@@ -105,7 +140,7 @@ app.layout = html.Div(children = [
                 id='teams-div',
                 children = [
                     # PLAYER SELECTION
-                    html.H3('Pick Teams to Compare:'),
+                    html.H4('Pick Teams to Compare:'),
                     generatePlayerDropdown('team-selector'),
                     dcc.Graph(
                         id='team-graph'
@@ -117,7 +152,11 @@ app.layout = html.Div(children = [
                 }
             )
         ]
-    )
+    ),
+    html.Div([
+        html.Hr(),
+		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare')
+        ], style = {'text-align': 'center'})
 ])
 
 @app.callback(dash.dependencies.Output('player-graph', 'figure'),
