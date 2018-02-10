@@ -122,7 +122,8 @@ app.layout = html.Div(children = [
                 id='players-div',
                 children = [
                     # PLAYER SELECTION
-                    html.H4('Pick Players to Compare:'),
+                    html.H4(style={'text-align': 'center'}, children= ['Player Comparator']),
+                    html.P('Select multiple players below to compare their average efficiency over a season!'),
                     generatePlayerDropdown('player-selector'),
                     dcc.Graph(
                         id='player-graph'
@@ -131,7 +132,7 @@ app.layout = html.Div(children = [
                 style = {
                     'width': '48%',
                     'float': 'left',
-                    'padding': '5px'
+                    'padding': '3px'
                 }
             ),
             # TEAM GRAPH
@@ -139,7 +140,8 @@ app.layout = html.Div(children = [
                 id='teams-div',
                 children = [
                     # PLAYER SELECTION
-                    html.H4('Pick Teams to Compare:'),
+                    html.H4(style={'text-align': 'center'}, children= ['Team Comparator']),
+                    html.P('Select multiple teams (by year) below to compare their average rating over a season!'),
                     generatePlayerDropdown('team-selector'),
                     dcc.Graph(
                         id='team-graph'
@@ -147,7 +149,9 @@ app.layout = html.Div(children = [
                 ],
                 style = {
                     'width': '48%',
-                    'float': 'right'
+                    'float': 'right',
+                    'padding': '3px'
+
                 }
             )
         ]
@@ -170,7 +174,7 @@ def player_selector_callback(playerNames):
     return {
         'data': playersToGraph,
         'layout': go.Layout(
-            title='Average Player Efficiency Over Season',
+            title='Player Efficiency Over Season',
             xaxis={'title': 'Games Into Season', 'range': [0, 40]},
             yaxis={'title': 'Player Efficiency', 'range': [0, 40]},
             showlegend=True,
@@ -189,7 +193,7 @@ def team_selector_callback(teamNames):
     return {
         'data': teamsToGraph,
         'layout': go.Layout(
-            title='Average Team Offensive Rating Over Season',
+            title='Team Offensive Rating Over Season',
             xaxis={'title': 'Games Into Season', 'range': [0, 40]},
             yaxis={'title': 'Offensive Rating', 'range': [50, 150]},
             showlegend=True,

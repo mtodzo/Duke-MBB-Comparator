@@ -40,10 +40,11 @@ class TeamDataTracker:
             reader = csv.DictReader(teamFile, delimiter=',')
             # read through entries, adding to neighbourhood list and price per neighbourhood dictionary
             for row in reader:
-                if row["Team"] in self.teams:
-                    self.teams[row["Team"]].addGame(row["Game No."], row["Offensive Rating"])
-                else:
-                    self.teams[row["Team"]] = Team(row["Team"])
+                if int(row["Team"][0:4]) >= 1957:
+                    if row["Team"] in self.teams:
+                        self.teams[row["Team"]].addGame(row["Game No."], row["Offensive Rating"])
+                    else:
+                        self.teams[row["Team"]] = Team(row["Team"])
 
     def getXVals(self):
         return self.xVals
