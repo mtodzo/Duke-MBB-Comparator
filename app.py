@@ -240,7 +240,6 @@ app.layout = html.Div(children = [
     ),
 
     html.Hr(),
-    html.Hr(),
     # CALCULATIONS SECTION
     html.Div(
         className='calculations',
@@ -266,6 +265,7 @@ app.layout = html.Div(children = [
             any possible error from this value is insignificant.')
         ]
     ),
+    html.Hr(),
     html.Div([
         html.Hr(),
 		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare'),
