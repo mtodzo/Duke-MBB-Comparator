@@ -102,7 +102,7 @@ def main():
             if oppPossessions != 0:
                 rowDictionary["Defensive Rating"] = oppPoints/oppPossessions*100   #write defensive Rating
             if seasonPossessions != 0 and oppPossessions != 0:
-                rowDictionary["Overall Rating"] = (seasonPoints/seasonPossessions*100 + oppPoints/oppPossessions*100)/2
+                rowDictionary["Overall Rating"] = (seasonPoints/seasonPossessions*100 - oppPoints/oppPossessions*100)
 
             writer.writerow(rowDictionary)
 
