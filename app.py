@@ -128,19 +128,22 @@ app.layout = html.Div(children = [
     html.Div(
         className='about',
         style={
-    		'width':'100%',
+    		'width':'90%',
         	'margin':'auto',
         	'overflow':'hidden',
-            'text-align': 'center'
+            'text-align': 'left'
         },
         children = [
-            html.H3('About'),
-            html.P('For our datathon hack, we were interested in comparing Duke basketball players and teams \
-            throughout history. Below you will find two comparison tools. On the left, you can view and compare \
-            each player’s average “efficiency” over the course of a season. Player efficiency is John Hollinger’s \
-            all-in-one player rating statistic, which provides a good overall idea of a player’s performance each \
-            game. On the right, you can compare the offensive, defensive, and overall ratings of Blue Devil teams each \
-            year. To calculate team ratings, we used ______________________')
+            html.H3(style= {'text-align': 'left'}, children=['About']),
+            html.P('For our datathon hack, we were interested in comparing Duke basketball players and teams throughout history. \
+            Below you will find two comparison tools.'),
+            html.P('On the left, you can view and compare Duke players\' average efficiency over \
+            the course of a season. "Player efficiency" is John Hollinger’s all-in-one player rating statistic, which takes into account \
+            multiple factors to give a good idea of a player’s overall performance each game.'),
+            html.P('On the right, you can compare the performance ratings of Blue Devil teams from each year. To calculate \
+            team ratings, we used the accepted metric of (total points/total possessions) * 100 for offensive rating and (opponent’s total \
+            points/opponent’s total possessions) * 100 for defensive rating. The overall team rating is the average of these two values.'),
+            html.P('More details regarding our specific calculations (including equations) can be found in the README of the Github repo, linked at the bottom of this site.')
         ]
     ),
 
@@ -149,10 +152,10 @@ app.layout = html.Div(children = [
     html.Div(
         className='graph-container',
         style={
-    		'width':'100%',
+    		'width':'90%',
         	'margin':'auto',
         	'overflow':'hidden',
-            'display': 'inline-block',
+            'text-align': 'left'
         },
 
         children = [
@@ -172,9 +175,8 @@ app.layout = html.Div(children = [
                     )
                 ],
                 style = {
-                    'width': '48%',
+                    'width': '43%',
                     'float': 'left',
-                    'padding': '3px'
                 }
             ),
             # TEAM GRAPH
@@ -183,7 +185,7 @@ app.layout = html.Div(children = [
                 children = [
                     # PLAYER SELECTION
                     html.H4(style={'text-align': 'center'}, children= ['Team Comparator']),
-                    html.P('Try comparing our current team to a championship team rating \
+                    html.P('Try comparing our current team to a championship team rating! \
                     (1990-91, 1991-1992, 2000-2001, 2009-10, 2014-15)'),
                     generatePlayerDropdown('team-selector'),
                     dcc.Tabs(
@@ -200,9 +202,8 @@ app.layout = html.Div(children = [
                     )
                 ],
                 style = {
-                    'width': '48%',
+                    'width': '43%',
                     'float': 'right',
-                    'padding': '3px'
 
                 }
             )
@@ -213,9 +214,17 @@ app.layout = html.Div(children = [
 
     # team performance average over history
     html.Div(
+        style={
+    		'width':'90%',
+        	'margin':'auto',
+        	'overflow':'hidden',
+            'text-align': 'left'
+        },
         children = [
-            html.H3(style={'text-align': 'center'}, children=['Team Historical Trends']),
-            html.P(style={'text-align': 'center'}, children=['Below, we can observe trends regarding Duke\'s basketball teams over time...']),
+            html.H3(children=['Team Historical Trends']),
+            html.P(children=['Below, we can observe trends regarding Duke\'s basketball teams over time. Note how \
+            our offensive ratings have steadily increased throughout the years, while our defensive rating hasn\'t— reflecting a shift in the way \
+            the game is played in the modern age (run and gun style of offense).']),
             dcc.Tabs(
                 tabs=[
                     {'label': 'Offensive Rating', 'value': 0},
@@ -317,8 +326,6 @@ def display_content(tab, teamNames):
 def display_content(tab):
 
     if tab == 0:
-        print(tdt.getTeamNames())
-        print(tdt.getTeamAverages('offensive'))
         return {
             'data': [go.Scatter(
                 x = tdt.getTeamNames(),
