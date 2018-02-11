@@ -137,18 +137,41 @@ app.layout = html.Div(children = [
             html.H3(style= {'text-align': 'left'}, children=['About']),
             html.P('For our datathon hack, we were interested in comparing Duke basketball players and teams throughout history. \
             Below you will find two comparison tools.'),
-            html.P('On the left, you can view and compare Duke players\' average efficiency over \
+            html.P('On the left, you can view and compare individual players\' average efficiency over \
             the course of a season. "Player efficiency" is John Hollinger’s all-in-one player rating statistic, which takes into account \
             multiple factors to give a good idea of a player’s overall performance each game.'),
-            html.P('On the right, you can compare the performance ratings of Blue Devil teams from each year. To calculate \
-            team ratings, we used the accepted metric of (total points/total possessions) * 100 for offensive rating and (opponent’s total \
-            points/opponent’s total possessions) * 100 for defensive rating. The overall team rating is the average of these two values.'),
-            html.P('More details regarding our specific calculations (including equations) can be found in the README of the Github repo, linked at the bottom of this site.')
+            html.P('On the right, you can compare the offensive, defensive, and overall performance ratings of Blue Devil teams from each year.'),
+            html.P('See the Calculations section below for more details on our specific calculations (including equations)!')
         ]
     ),
 
     html.Hr(),
-
+    # CALCULATIONS SECTION
+    html.Div(
+        className='calculations',
+        style={
+    		'width':'90%',
+        	'margin':'auto',
+        	'overflow':'hidden',
+            'text-align': 'left'
+        },
+        children = [
+            html.H3(style= {'text-align': 'left'}, children=['Calculations']),
+            html.P('To calculate player efficiency, we used the following equation:'),
+            html.P(style= {'margin-left' : '10em'}, children=['points + rebounds + assists + steals + blocks − missed FG − missed FT - turnovers) / (games played)']),
+            html.P('To calculate team ratings, we used the accepted metrics of:'),
+            html.P(style= {'margin-left' : '10em'}, children=['offensive rating = (total points/total possessions) * 100']),
+            html.P(style= {'margin-left' : '10em'}, children=['defensive rating = (opponent\'s total points / opponent\'s total possessions) * 100']),
+            html.P(style= {'margin-left' : '10em'}, children=['overall rating = (offensive rating + defensive rating) / 2']),
+            html.P('To calculate total possessions, we used the following equation:'),
+            html.P(style= {'margin-left' : '10em'}, children=['total number of possessions = FG attempted - offensive rebounds + turnovers + (0.4 x FT attempted)']),
+            html.P('This equation is always used for calculating possessions since basketball possessions can only end in a \
+            field goal attempt, offensive rebound, turnover, or free throw. The factor by which the free throw is multiplied \
+            by may vary between .4 and .5 in some versions of this equation, but as long as the value is kept constant for the comparisons, \
+            any possible error from this value is insignificant.')
+        ]
+    ),
+    html.Hr(),
     html.Div(
         className='graph-container',
         style={
@@ -240,6 +263,8 @@ app.layout = html.Div(children = [
             )
         ]
     ),
+
+    html.Hr(),
 
     html.Div([
         html.Hr(),
