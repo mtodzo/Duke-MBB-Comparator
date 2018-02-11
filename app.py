@@ -152,8 +152,9 @@ app.layout = html.Div(children = [
     html.Div(
         className='graph-container',
         style={
-    		'width':'90%',
+    		'width':'95%',
         	'margin':'auto',
+            'padding': '0px',
         	'overflow':'hidden',
             'text-align': 'left'
         },
@@ -175,7 +176,7 @@ app.layout = html.Div(children = [
                     )
                 ],
                 style = {
-                    'width': '43%',
+                    'width': '47%',
                     'float': 'left',
                 }
             ),
@@ -202,7 +203,7 @@ app.layout = html.Div(children = [
                     )
                 ],
                 style = {
-                    'width': '43%',
+                    'width': '47%',
                     'float': 'right',
 
                 }
