@@ -145,32 +145,7 @@ app.layout = html.Div(children = [
         ]
     ),
 
-    html.Hr(),
-    # CALCULATIONS SECTION
-    html.Div(
-        className='calculations',
-        style={
-    		'width':'90%',
-        	'margin':'auto',
-        	'overflow':'hidden',
-            'text-align': 'left'
-        },
-        children = [
-            html.H3(style= {'text-align': 'left'}, children=['Calculations']),
-            html.P('To calculate player efficiency, we used the following equation:'),
-            html.P(style= {'margin-left' : '10em'}, children=['points + rebounds + assists + steals + blocks − missed FG − missed FT - turnovers) / (games played)']),
-            html.P('To calculate team ratings, we used the accepted metrics of:'),
-            html.P(style= {'margin-left' : '10em'}, children=['offensive rating = (total points/total possessions) * 100']),
-            html.P(style= {'margin-left' : '10em'}, children=['defensive rating = (opponent\'s total points / opponent\'s total possessions) * 100']),
-            html.P(style= {'margin-left' : '10em'}, children=['overall rating = (offensive rating + defensive rating) / 2']),
-            html.P('To calculate total possessions, we used the following equation:'),
-            html.P(style= {'margin-left' : '10em'}, children=['total number of possessions = FG attempted - offensive rebounds + turnovers + (0.4 x FT attempted)']),
-            html.P('This equation is always used for calculating possessions since basketball possessions can only end in a \
-            field goal attempt, offensive rebound, turnover, or free throw. The factor by which the free throw is multiplied \
-            by may vary between .4 and .5 in some versions of this equation, but as long as the value is kept constant for the comparisons, \
-            any possible error from this value is insignificant.')
-        ]
-    ),
+
     html.Hr(),
     html.Div(
         className='graph-container',
@@ -265,7 +240,32 @@ app.layout = html.Div(children = [
     ),
 
     html.Hr(),
-
+    html.Hr(),
+    # CALCULATIONS SECTION
+    html.Div(
+        className='calculations',
+        style={
+    		'width':'90%',
+        	'margin':'auto',
+        	'overflow':'hidden',
+            'text-align': 'left'
+        },
+        children = [
+            html.H3(style= {'text-align': 'left'}, children=['Calculations']),
+            html.P('To calculate player efficiency, we used the following equation:'),
+            html.P(style= {'margin-left' : '10em'}, children=['points + rebounds + assists + steals + blocks − missed FG − missed FT - turnovers) / (games played)']),
+            html.P('To calculate team ratings, we used the accepted metrics of:'),
+            html.P(style= {'margin-left' : '10em'}, children=['offensive rating = (total points/total possessions) * 100']),
+            html.P(style= {'margin-left' : '10em'}, children=['defensive rating = (opponent\'s total points / opponent\'s total possessions) * 100']),
+            html.P(style= {'margin-left' : '10em'}, children=['overall rating = (offensive rating + defensive rating) / 2']),
+            html.P('To calculate total possessions, we used the following equation:'),
+            html.P(style= {'margin-left' : '10em'}, children=['total number of possessions = FG attempted - offensive rebounds + turnovers + (0.4 x FT attempted)']),
+            html.P('This equation is always used for calculating possessions since basketball possessions can only end in a \
+            field goal attempt, offensive rebound, turnover, or free throw. The factor by which the free throw is multiplied \
+            by may vary between .4 and .5 in some versions of this equation, but as long as the value is kept constant for the comparisons, \
+            any possible error from this value is insignificant.')
+        ]
+    ),
     html.Div([
         html.Hr(),
 		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare'),
