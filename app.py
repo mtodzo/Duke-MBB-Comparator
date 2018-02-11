@@ -30,7 +30,9 @@ playerList = pdt.getPlayers()
 teamList = tdt.getTeams()
 
 playerGraphs = {}
-teamGraphs = {}
+offensiveTeamGraphs = {}
+defensiveTeamGraphs = {}
+overallTeamGraphs = {}
 
 def createPlayerGraphs():
     for player in playerList:
@@ -44,13 +46,28 @@ def createPlayerGraphs():
 
 def createTeamGraphs():
     for team in teamList:
-        p = go.Scatter(
+        name = team.getName()
+        offensive = go.Scatter(
             x = team.getGameNos(),
-            y = team.getAverageEffs(),
+            y = team.getAverageEffs('offensive'),
             mode = 'lines',
-            name = team.getName()
+            name = name
         )
-        teamGraphs[team.getName()] = p
+        defensive = go.Scatter(
+            x = team.getGameNos(),
+            y = team.getAverageEffs('defensive'),
+            mode = 'lines',
+            name = name
+        )
+        overall = go.Scatter(
+            x = team.getGameNos(),
+            y = team.getAverageEffs('overall'),
+            mode = 'lines',
+            name = name
+        )
+        offensiveTeamGraphs[name] = offensive
+        defensiveTeamGraphs[name] = defensive
+        overallTeamGraphs[name] = overall
 
 createPlayerGraphs()
 createTeamGraphs()
@@ -62,7 +79,7 @@ def generatePlayerDropdown(selectorID):
     if selectorID == 'player-selector':
         for player in playerList:
             data = {}
-            data['label'] = player.name
+            data['label'] = player.name.replace('_', ' ')
             data['value'] = player.name
             values.append(player)
             complete_data.append(data)
@@ -107,6 +124,28 @@ app.layout = html.Div(children = [
 
     html.Hr(),
 
+    # ABOUT SECTION
+    html.Div(
+        className='about',
+        style={
+    		'width':'100%',
+        	'margin':'auto',
+        	'overflow':'hidden',
+            'text-align': 'center'
+        },
+        children = [
+            html.H3('About'),
+            html.P('For our datathon hack, we were interested in comparing Duke basketball players and teams \
+            throughout history. Below you will find two comparison tools. On the left, you can view and compare \
+            each player’s average “efficiency” over the course of a season. Player efficiency is John Hollinger’s \
+            all-in-one player rating statistic, which provides a good overall idea of a player’s performance each \
+            game. On the right, you can compare the offensive, defensive, and overall ratings of Blue Devil teams each \
+            year. To calculate team ratings, we used ______________________')
+        ]
+    ),
+
+    html.Hr(),
+
     html.Div(
         className='graph-container',
         style={
@@ -123,8 +162,11 @@ app.layout = html.Div(children = [
                 children = [
                     # PLAYER SELECTION
                     html.H4(style={'text-align': 'center'}, children= ['Player Comparator']),
-                    html.P('Select multiple players below to compare their average efficiency over a season!'),
+                    html.P('Try comparing Christian Laettner and Marvin Bagley III, or \
+                    Grayson Allen\'s peformance over the course of his fours years (\'15, \'16, \'17, \'18)!'),
                     generatePlayerDropdown('player-selector'),
+                    html.Br(),
+                    html.Br(),
                     dcc.Graph(
                         id='player-graph'
                     )
@@ -141,8 +183,18 @@ app.layout = html.Div(children = [
                 children = [
                     # PLAYER SELECTION
                     html.H4(style={'text-align': 'center'}, children= ['Team Comparator']),
-                    html.P('Select multiple teams (by year) below to compare their average rating over a season!'),
+                    html.P('Try comparing our current team to a championship team rating \
+                    (1990-91, 1991-1992, 2000-2001, 2009-10, 2014-15)'),
                     generatePlayerDropdown('team-selector'),
+                    dcc.Tabs(
+             	    	tabs=[
+             	    		{'label': 'Offensive Rating', 'value': 0},
+             	    		{'label': 'Defensive Rating', 'value': 1},
+             	    		{'label': 'Overall Rating', 'value': 2}
+             	    	],
+             	    	value=0,
+             	    	id='tabs'
+             	    ),
                     dcc.Graph(
                         id='team-graph'
                     )
@@ -156,10 +208,36 @@ app.layout = html.Div(children = [
             )
         ]
     ),
+
+    html.Hr(),
+
+    # team performance average over history
+    html.Div(
+        children = [
+            html.H3(style={'text-align': 'center'}, children=['Team Historical Trends']),
+            html.P(style={'text-align': 'center'}, children=['Below, we can observe trends regarding Duke\'s basketball teams over time...']),
+            dcc.Tabs(
+                tabs=[
+                    {'label': 'Offensive Rating', 'value': 0},
+                    {'label': 'Defensive Rating', 'value': 1},
+                    {'label': 'Overall Rating', 'value': 2}
+                ],
+                value=0,
+                id='history-tabs'
+            ),
+            dcc.Graph(
+                id='history-graph'
+            )
+        ]
+    ),
+
     html.Div([
         html.Hr(),
-		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare')
-        ], style = {'text-align': 'center'})
+		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare'),
+        html.P('#DukeMBBStats')
+        ],
+        style = {'text-align': 'center'}
+    )
 ])
 
 @app.callback(dash.dependencies.Output('player-graph', 'figure'),
@@ -181,24 +259,101 @@ def player_selector_callback(playerNames):
         ),
     }
 
-@app.callback(dash.dependencies.Output('team-graph', 'figure'),
-              [dash.dependencies.Input('team-selector', 'value')])
-
-def team_selector_callback(teamNames):
-
+@app.callback(dash.dependencies.Output('team-graph', 'figure'), [dash.dependencies.Input('tabs', 'value'), dash.dependencies.Input('team-selector', 'value')])
+def display_content(tab, teamNames):
     teamsToGraph = []
-    if teamNames:
-        for tn in teamNames:
-            teamsToGraph.append(teamGraphs[tn])
-    return {
-        'data': teamsToGraph,
-        'layout': go.Layout(
-            title='Team Offensive Rating Over Season',
-            xaxis={'title': 'Games Into Season', 'range': [0, 40]},
-            yaxis={'title': 'Offensive Rating', 'range': [50, 150]},
-            showlegend=True,
-        ),
-    }
+
+    if tab == 0:
+        if teamNames:
+            for tn in teamNames:
+                teamsToGraph.append(offensiveTeamGraphs[tn])
+        return {
+            'data': teamsToGraph,
+            'layout': go.Layout(
+                title='Offensive Team Rating Over Season',
+                xaxis={'title': 'Games Into Season', 'range': [0, 40]},
+                yaxis={'title': 'Rating', 'range': [50, 150]},
+                showlegend=True,
+            ),
+        }
+    elif tab == 1:
+        if teamNames:
+            for tn in teamNames:
+                teamsToGraph.append(defensiveTeamGraphs[tn])
+        return {
+            'data': teamsToGraph,
+            'layout': go.Layout(
+                title='Defensive Team Rating Over Season',
+                xaxis={'title': 'Games Into Season', 'range': [0, 40]},
+                yaxis={'title': 'Rating', 'range': [50, 150]},
+                showlegend=True,
+            ),
+        }
+    elif tab == 2:
+        if teamNames:
+            for tn in teamNames:
+                teamsToGraph.append(overallTeamGraphs[tn])
+        return {
+            'data': teamsToGraph,
+            'layout': go.Layout(
+                title='Overall Team Rating Over Season',
+                xaxis={'title': 'Games Into Season', 'range': [0, 40]},
+                yaxis={'title': 'Rating', 'range': [50, 150]},
+                showlegend=True,
+            ),
+        }
+    else:
+    	return {
+            'data': teamsToGraph,
+            'layout': go.Layout(
+                title='Select a Team to View Ratings',
+                xaxis={'title': 'Games Into Season', 'range': [0, 40]},
+                yaxis={'title': 'Rating', 'range': [50, 150]},
+                showlegend=True,
+            ),
+        }
+
+@app.callback(dash.dependencies.Output('history-graph', 'figure'), [dash.dependencies.Input('history-tabs', 'value')])
+def display_content(tab):
+
+    if tab == 0:
+        print(tdt.getTeamNames())
+        print(tdt.getTeamAverages('offensive'))
+        return {
+            'data': [go.Scatter(
+                x = tdt.getTeamNames(),
+                y = tdt.getTeamAverages('offensive'),
+                mode = 'lines',
+                name = 'Offensive Averages'
+            )],
+            'layout': go.Layout(
+                title='Team Offensive Ratings Over Time',
+            )
+        }
+    elif tab == 1:
+        return {
+            'data': [go.Scatter(
+                x = tdt.getTeamNames(),
+                y = tdt.getTeamAverages('defensive'),
+                mode = 'lines',
+                name = 'Defensive Averages'
+            )],
+            'layout': go.Layout(
+                title='Team Defensive Ratings Over Time',
+            )
+        }
+    elif tab == 2:
+        return {
+                'data': [go.Scatter(
+                    x = tdt.getTeamNames(),
+                    y = tdt.getTeamAverages('overall'),
+                    mode = 'lines',
+                    name = 'Overall Averages'
+                )],
+                'layout': go.Layout(
+                    title='Team Overall Ratings Over Time',
+                )
+            }
 
 if __name__ == '__main__':
     app.run_server(debug=True)
