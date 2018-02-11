@@ -267,7 +267,6 @@ app.layout = html.Div(children = [
     ),
     html.Hr(),
     html.Div([
-        html.Hr(),
 		html.A('View Project Github', href='https://github.com/jwei98/dmbb-compare'),
         html.P('#DukeMBBStats')
         ],
