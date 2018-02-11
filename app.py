@@ -152,7 +152,7 @@ app.layout = html.Div(children = [
     html.Div(
         className='graph-container',
         style={
-    		'width':'100%',
+    		'width':'95%',
         	'margin':'auto',
             'padding': '0px',
         	'overflow':'hidden',
