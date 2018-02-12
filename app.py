@@ -184,8 +184,10 @@ app.layout = html.Div(children = [
                 children = [
                     # PLAYER SELECTION
                     html.H4(style={'text-align': 'center'}, children= ['Team Comparator']),
-                    html.P('Try comparing our current team to a championship team rating! \
-                    (1990-91, 1991-1992, 2000-2001, 2009-10, 2014-15)'),
+                    html.P('Try comparing our current team to a championship team!'),
+                    html.P(style={'font-size': '12'}, children= '(Note: The higher the \
+                    offensive rating the better, and the lower the defensive rating the better. \
+                    See calculations section below for more info.)'),
                     generatePlayerDropdown('team-selector'),
                     dcc.Tabs(
              	    	tabs=[
