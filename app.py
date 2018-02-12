@@ -256,7 +256,7 @@ app.layout = html.Div(children = [
             html.P('To calculate team ratings, we used the accepted metrics of:'),
             html.P(style= {'margin-left' : '10em'}, children=['offensive rating = (total points/total possessions) * 100']),
             html.P(style= {'margin-left' : '10em'}, children=['defensive rating = (opponent\'s total points / opponent\'s total possessions) * 100']),
-            html.P(style= {'margin-left' : '10em'}, children=['overall rating = (offensive rating + defensive rating) / 2']),
+            html.P(style= {'margin-left' : '10em'}, children=['overall rating = offensive rating - defensive rating']),
             html.P('To calculate total possessions, we used the following equation:'),
             html.P(style= {'margin-left' : '10em'}, children=['total number of possessions = FG attempted - offensive rebounds + turnovers + (0.4 x FT attempted)']),
             html.P('This equation is always used for calculating possessions since basketball possessions can only end in a \
@@ -332,7 +332,7 @@ def display_content(tab, teamNames):
             'layout': go.Layout(
                 title='Overall Team Rating Over Season',
                 xaxis={'title': 'Games Into Season', 'range': [0, 40]},
-                yaxis={'title': 'Rating', 'range': [50, 150]},
+                yaxis={'title': 'Rating', 'range': [-20, 80]},
                 showlegend=True,
             ),
         }
