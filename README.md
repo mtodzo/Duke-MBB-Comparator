@@ -5,7 +5,7 @@ On the left, you can view and compare each player’s average “efficiency” o
 
 (points + rebounds + assists + steals + blocks − Missed FG − Missed FT - turnovers) / games played
 
-On the right, you can compare the offensive, defensive, and overall ratings of Blue Devil teams each year. To calculate team ratings, we used the accepted metric of (total points/total possessions) * 100 for offensive rating and (opponent’s total points/opponent’s total possessions) * 100 for defensive rating. The overall team rating is the average of these two values. To calculate total possessions, we used the following equation:
+On the right, you can compare the offensive, defensive, and overall ratings of Blue Devil teams each year. To calculate team ratings, we used the accepted metric of (total points/total possessions) * 100 for offensive rating and (opponent’s total points/opponent’s total possessions) * 100 for defensive rating. The overall team rating is the difference between these two values. To calculate total possessions, we used the following equation:
 
 FGA - OREB + TO + (0.4 x FTA) = total number of possessions
 
